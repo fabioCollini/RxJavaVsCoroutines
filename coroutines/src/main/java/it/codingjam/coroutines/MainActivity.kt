@@ -2,11 +2,11 @@ package it.codingjam.coroutines
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.experimental.CoroutineCallAdapterFactory
+import it.codingjam.common.ServiceFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.delay
-import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,8 +15,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         async(UI) {
-            delay(1, TimeUnit.SECONDS)
-            text.text = "AAA"
+            val service = ServiceFactory.createRxJavaService<StackOverflowServiceCoroutines>(CoroutineCallAdapterFactory())
+            try {
+                text.text = service.getTopUsers().await().toString()
+            } catch (e: Exception) {
+                text.text = e.message
+            }
         }
     }
 }
