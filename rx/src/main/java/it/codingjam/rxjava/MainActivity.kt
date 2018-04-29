@@ -1,4 +1,4 @@
-package com.droidcon.coroutines
+package it.codingjam.rxjava
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
