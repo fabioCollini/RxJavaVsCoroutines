@@ -1,6 +1,7 @@
 package it.codingjam.coroutines
 
 import android.arch.lifecycle.ViewModel
+import it.codingjam.common.UserStats
 import it.codingjam.common.arch.LiveDataDelegate
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
@@ -8,7 +9,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 
-class ViewModel1(private val service: StackOverflowServiceCoroutines) : ViewModel() {
+class ViewModel4(private val service: StackOverflowServiceCoroutines) : ViewModel() {
 
     val liveDataDelegate = LiveDataDelegate("")
 
@@ -20,9 +21,11 @@ class ViewModel1(private val service: StackOverflowServiceCoroutines) : ViewMode
         launch(CommonPool + job) {
             try {
                 val users = service.getTopUsers().await()
-                val firstUser = users.first()
-                val badges = service.getBadges(firstUser.id).await()
-                updateUi(badges)
+                val userStats: List<UserStats> =
+                        users.take(5)
+                                .map { Triple(it, service.getTags(it.id), service.getBadges(it.id)) }
+                                .map { (user, tags, badges) -> UserStats(user, tags.await(), badges.await()) }
+                updateUi(userStats)
             } catch (e: Exception) {
                 updateUi(e)
             }

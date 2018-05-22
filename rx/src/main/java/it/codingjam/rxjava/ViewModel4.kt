@@ -3,13 +3,14 @@ package it.codingjam.rxjava
 import android.arch.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.Singles
 import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.Schedulers.io
-import it.codingjam.common.Badge
-import it.codingjam.common.User
+import it.codingjam.common.UserStats
 import it.codingjam.common.arch.LiveDataDelegate
 
-class ViewModel1(private val service: StackOverflowServiceRx) : ViewModel() {
+class ViewModel4(private val service: StackOverflowServiceRx) : ViewModel() {
 
     val liveDataDelegate = LiveDataDelegate("")
 
@@ -20,15 +21,19 @@ class ViewModel1(private val service: StackOverflowServiceRx) : ViewModel() {
     fun load() {
         disposable +=
                 service.getTopUsers()
-                        .map { it.first() }
-                        .flatMap { firstUser ->
-                            service.getBadges(firstUser.id)
-                                    .map { badges -> firstUser to badges }
+                        .flattenAsObservable { it.take(5) }
+                        .concatMapEager { user ->
+                            Singles.zip(
+                                    service.getBadges(user.id).subscribeOn(Schedulers.io()),
+                                    service.getTags(user.id).subscribeOn(Schedulers.io()),
+                                    { badges, tags -> UserStats(user, tags, badges) }
+                            ).toObservable()
                         }
+                        .toList()
                         .subscribeOn(io())
                         .observeOn(mainThread())
                         .subscribe(
-                                { pair: Pair<User, List<Badge>> -> updateUi(pair) },
+                                { users: List<UserStats> -> updateUi(users) },
                                 { e -> updateUi(e) }
                         )
     }

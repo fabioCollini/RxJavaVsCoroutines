@@ -1,6 +1,8 @@
 package it.codingjam.coroutines
 
 import android.arch.lifecycle.ViewModel
+import it.codingjam.common.Badge
+import it.codingjam.common.User
 import it.codingjam.common.arch.LiveDataDelegate
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
@@ -8,7 +10,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 
-class ViewModel1(private val service: StackOverflowServiceCoroutines) : ViewModel() {
+class ViewModel2(private val service: StackOverflowServiceCoroutines) : ViewModel() {
 
     val liveDataDelegate = LiveDataDelegate("")
 
@@ -20,9 +22,11 @@ class ViewModel1(private val service: StackOverflowServiceCoroutines) : ViewMode
         launch(CommonPool + job) {
             try {
                 val users = service.getTopUsers().await()
-                val firstUser = users.first()
-                val badges = service.getBadges(firstUser.id).await()
-                updateUi(badges)
+                val usersWithBadges: List<Pair<User, List<Badge>>> =
+                        users.take(5)
+                                .map { it to service.getBadges(it.id) }
+                                .map { (user, badges) -> user to badges.await() }
+                updateUi(usersWithBadges)
             } catch (e: Exception) {
                 updateUi(e)
             }

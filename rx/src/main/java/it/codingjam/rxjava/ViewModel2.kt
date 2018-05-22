@@ -9,7 +9,7 @@ import it.codingjam.common.Badge
 import it.codingjam.common.User
 import it.codingjam.common.arch.LiveDataDelegate
 
-class ViewModel1(private val service: StackOverflowServiceRx) : ViewModel() {
+class ViewModel2(private val service: StackOverflowServiceRx) : ViewModel() {
 
     val liveDataDelegate = LiveDataDelegate("")
 
@@ -20,15 +20,16 @@ class ViewModel1(private val service: StackOverflowServiceRx) : ViewModel() {
     fun load() {
         disposable +=
                 service.getTopUsers()
-                        .map { it.first() }
-                        .flatMap { firstUser ->
-                            service.getBadges(firstUser.id)
-                                    .map { badges -> firstUser to badges }
+                        .flattenAsObservable { it.take(5) }
+                        .flatMapSingle { user ->
+                            service.getBadges(user.id)
+                                    .map { badges -> user to badges }
                         }
+                        .toList()
                         .subscribeOn(io())
                         .observeOn(mainThread())
                         .subscribe(
-                                { pair: Pair<User, List<Badge>> -> updateUi(pair) },
+                                { users: List<Pair<User, List<Badge>>> -> updateUi(users) },
                                 { e -> updateUi(e) }
                         )
     }

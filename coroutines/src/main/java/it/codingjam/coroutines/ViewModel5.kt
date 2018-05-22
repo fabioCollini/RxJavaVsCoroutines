@@ -2,13 +2,11 @@ package it.codingjam.coroutines
 
 import android.arch.lifecycle.ViewModel
 import it.codingjam.common.arch.LiveDataDelegate
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.withContext
+import java.util.concurrent.TimeUnit.SECONDS
 
-class ViewModel1(private val service: StackOverflowServiceCoroutines) : ViewModel() {
+class ViewModel5(private val service: StackOverflowServiceCoroutines) : ViewModel() {
 
     val liveDataDelegate = LiveDataDelegate("")
 
@@ -19,10 +17,12 @@ class ViewModel1(private val service: StackOverflowServiceCoroutines) : ViewMode
     fun load() {
         launch(CommonPool + job) {
             try {
-                val users = service.getTopUsers().await()
-                val firstUser = users.first()
-                val badges = service.getBadges(firstUser.id).await()
-                updateUi(badges)
+                retry(3) {
+                    withTimeout(10, SECONDS) {
+                        val users = service.getTopUsers().await()
+                        updateUi(users)
+                    }
+                }
             } catch (e: Exception) {
                 updateUi(e)
             }
@@ -37,4 +37,14 @@ class ViewModel1(private val service: StackOverflowServiceCoroutines) : ViewMode
     override fun onCleared() {
         job.cancel()
     }
+}
+
+suspend fun <T> retry(attempts: Int = 5, f: suspend () -> T): T {
+    repeat(attempts - 1) {
+        try {
+            f()
+        } catch (e: Exception) {
+        }
+    }
+    return f()
 }
