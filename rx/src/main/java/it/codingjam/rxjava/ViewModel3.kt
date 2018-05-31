@@ -1,12 +1,12 @@
 package it.codingjam.rxjava
 
 import android.arch.lifecycle.ViewModel
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.Singles
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.Schedulers.io
+import it.codingjam.common.User
 import it.codingjam.common.UserStats
 import it.codingjam.common.arch.LiveDataDelegate
 
@@ -19,25 +19,31 @@ class ViewModel3(private val service: StackOverflowServiceRx) : ViewModel() {
     private val disposable = CompositeDisposable()
 
     fun load() {
-        disposable +=
-                service.getTopUsers()
-                        .map { it.first() }
-                        .flatMap { firstUser ->
-                            Singles.zip(
-                                    service.getBadges(firstUser.id).subscribeOn(Schedulers.io()),
-                                    service.getTags(firstUser.id).subscribeOn(Schedulers.io()),
-                                    { badges, tags -> UserStats(firstUser, tags, badges) }
-                            )
-                        }
-                        .subscribeOn(io())
-                        .observeOn(mainThread())
-                        .subscribe(
-                                { pair: UserStats -> updateUi(pair) },
-                                { e -> updateUi(e) }
-                        )
+      disposable +=
+service.getTopUsers()
+    .flattenAsObservable { it.take(5) }
+    .concatMapEager { user ->
+      userDetail(user).toObservable()
+    }
+    .toList()
+    .subscribeOn(io())
+    .observeOn(mainThread())
+    .subscribe(
+        { users: List<UserStats> ->
+          updateUi(users)
+        },
+        { e -> updateUi(e) }
+    )
     }
 
-    private fun updateUi(s: Any) {
+fun userDetail(user: User): Single<UserStats> {
+  return service.getBadges(user.id)
+      .map { badges ->
+        UserStats(user, badges)
+      }
+}
+
+  private fun updateUi(s: Any) {
         state = s.toString()
     }
 

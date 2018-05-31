@@ -14,48 +14,49 @@ import java.util.concurrent.TimeUnit.SECONDS
 
 class ViewModel6(private val service: StackOverflowServiceRx) : ViewModel() {
 
-    val liveDataDelegate = LiveDataDelegate("")
+  val liveDataDelegate = LiveDataDelegate("")
 
-    var state by liveDataDelegate
+  var state by liveDataDelegate
 
-    private val disposable = CompositeDisposable()
+  private val disposable = CompositeDisposable()
 
-    fun load() {
-        disposable +=
-                service.getTopUsers()
-                        .subscribeOn(io())
-                        .observeOn(mainThread())
-                        .timeout(10, SECONDS)
-                        .retryWhen(ExponentialBackoff(3))
-                        .subscribe(
-                                { users -> updateUi(users) },
-                                { e -> updateUi(e) }
-                        )
-    }
+  fun load() {
+    disposable +=
+service.getTopUsers()
+    .subscribeOn(io())
+    .observeOn(mainThread())
+    .timeout(10, SECONDS)
+    .retryWhen(ExponentialBackoff(3))
+    .subscribe(
+        { users -> updateUi(users) },
+        { e -> updateUi(e) }
+    )
+  }
 
-    private fun updateUi(s: Any) {
-        state = s.toString()
-    }
+  private fun updateUi(s: Any) {
+    state = s.toString()
+  }
 
-    override fun onCleared() {
-        disposable.clear()
-    }
+  override fun onCleared() {
+    disposable.clear()
+  }
 }
 
-class ExponentialBackoff(private val maxRetries: Int) : Function1<Flowable<out Throwable>, Publisher<*>> {
+class ExponentialBackoff(private val maxRetries: Int) :
+    Function1<Flowable<out Throwable>, Publisher<*>> {
 
-    private var retryCount = 0
-    private var currentDelay = 100L + Random().nextInt(100)
+  private var retryCount = 0
+  private var currentDelay = 100L + Random().nextInt(100)
 
-    override fun invoke(attempts: Flowable<out Throwable>): Publisher<*> {
-        return attempts
-                .flatMap { throwable ->
-                    if (++retryCount < maxRetries)
-                        Flowable.timer(currentDelay, TimeUnit.MILLISECONDS).also {
-                            currentDelay *= 2
-                        }
-                    else
-                        Flowable.error(throwable)
-                }
-    }
+  override fun invoke(attempts: Flowable<out Throwable>): Publisher<*> {
+    return attempts
+        .flatMap { throwable ->
+          if (++retryCount < maxRetries)
+            Flowable.timer(currentDelay, TimeUnit.MILLISECONDS).also {
+              currentDelay *= 2
+            }
+          else
+            Flowable.error(throwable)
+        }
+  }
 }

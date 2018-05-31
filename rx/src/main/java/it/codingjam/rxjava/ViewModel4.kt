@@ -1,12 +1,13 @@
 package it.codingjam.rxjava
 
 import android.arch.lifecycle.ViewModel
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.Singles
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.Schedulers.io
+import it.codingjam.common.User
 import it.codingjam.common.UserStats
 import it.codingjam.common.arch.LiveDataDelegate
 
@@ -23,11 +24,7 @@ class ViewModel4(private val service: StackOverflowServiceRx) : ViewModel() {
                 service.getTopUsers()
                         .flattenAsObservable { it.take(5) }
                         .concatMapEager { user ->
-                            Singles.zip(
-                                    service.getBadges(user.id).subscribeOn(Schedulers.io()),
-                                    service.getTags(user.id).subscribeOn(Schedulers.io()),
-                                    { badges, tags -> UserStats(user, tags, badges) }
-                            ).toObservable()
+                            userDetail(user).toObservable()
                         }
                         .toList()
                         .subscribeOn(io())
@@ -38,7 +35,15 @@ class ViewModel4(private val service: StackOverflowServiceRx) : ViewModel() {
                         )
     }
 
-    private fun updateUi(s: Any) {
+private fun userDetail(user: User): Single<UserStats> {
+  return Singles.zip(
+      service.getBadges(user.id).subscribeOn(io()),
+      service.getTags(user.id).subscribeOn(io()),
+      { badges, tags -> UserStats(user, badges, tags) }
+  )
+}
+
+  private fun updateUi(s: Any) {
         state = s.toString()
     }
 

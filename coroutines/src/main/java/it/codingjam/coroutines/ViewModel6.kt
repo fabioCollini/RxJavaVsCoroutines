@@ -9,48 +9,48 @@ import java.util.concurrent.TimeUnit.SECONDS
 
 class ViewModel6(private val service: StackOverflowServiceCoroutines) : ViewModel() {
 
-    val liveDataDelegate = LiveDataDelegate("")
+  val liveDataDelegate = LiveDataDelegate("")
 
-    var state by liveDataDelegate
+  var state by liveDataDelegate
 
-    private val job = Job()
+  private val job = Job()
 
-    fun load() {
-        launch(CommonPool + job) {
-            try {
-                exponentialBackoff(3) {
-                    withTimeout(10, SECONDS) {
-                        val users = service.getTopUsers().await()
-                        updateUi(users)
-                    }
-                }
-            } catch (e: Exception) {
-                updateUi(e)
-            }
-        }
+  fun load() {
+launch(CommonPool + job) {
+  try {
+    exponentialBackoff(3) {
+      withTimeout(10, SECONDS) {
+        val users = service.getTopUsers().await()
+        updateUi(users)
+      }
     }
+  } catch (e: Exception) {
+    updateUi(e)
+  }
+}
+  }
 
-    private suspend fun updateUi(s: Any) = withContext(UI) {
-        state = s.toString()
-    }
+  private suspend fun updateUi(s: Any) = withContext(UI) {
+    state = s.toString()
+  }
 
 
-    override fun onCleared() {
-        job.cancel()
-    }
+  override fun onCleared() {
+    job.cancel()
+  }
 }
 
 suspend fun <T> exponentialBackoff(
-        times: Int = 5,
-        block: suspend () -> T): T {
-    var currentDelay = 100 + Random().nextInt(100)
-    repeat(times - 1) {
-        try {
-            return block()
-        } catch (e: Exception) {
-        }
-        delay(currentDelay)
-        currentDelay *= 2
+    times: Int = 5,
+    block: suspend () -> T): T {
+  var currentDelay = 100 + Random().nextInt(100)
+  repeat(times - 1) {
+    try {
+      return block()
+    } catch (e: Exception) {
     }
-    return block() // last attempt
+    delay(currentDelay)
+    currentDelay *= 2
+  }
+  return block()
 }

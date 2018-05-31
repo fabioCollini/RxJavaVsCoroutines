@@ -10,19 +10,19 @@ import retrofit2.http.Path
 
 interface StackOverflowServiceCoroutines {
 
-    @EnvelopePayload("items")
-    @GET("/users")
-    fun getTopUsers(): Deferred<List<User>>
+  @EnvelopePayload("items")
+  @GET("/users")
+  fun getTopUsers(): Deferred<List<User>>
 
-    @EnvelopePayload("items")
-    @GET("/users/{userId}/badges")
-    fun getBadges(
-            @Path("userId") userId: Int
-    ): Deferred<List<Badge>>
+  @EnvelopePayload("items")
+  @GET("/users/{userId}/badges")
+  fun getBadges(
+      @Path("userId") userId: Int
+  ): Deferred<List<Badge>>
 
-    @EnvelopePayload("items")
-    @GET("/users/{userId}/top-tags")
-    fun getTags(
-            @Path("userId") userId: Int
-    ): Deferred<List<Tag>>
+  @EnvelopePayload("items")
+  @GET("/users/{userId}/top-tags")
+  fun getTags(
+      @Path("userId") userId: Int
+  ): Deferred<List<Tag>>
 }

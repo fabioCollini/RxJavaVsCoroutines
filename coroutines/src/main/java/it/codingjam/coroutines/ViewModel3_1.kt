@@ -1,12 +1,13 @@
 package it.codingjam.coroutines
 
 import android.arch.lifecycle.ViewModel
+import it.codingjam.common.User
 import it.codingjam.common.UserStats
 import it.codingjam.common.arch.LiveDataDelegate
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 
-class ViewModel3(private val service: StackOverflowServiceCoroutines) : ViewModel() {
+class ViewModel3_1(private val service: StackOverflowServiceCoroutines) : ViewModel() {
 
   val liveDataDelegate = LiveDataDelegate("")
 
@@ -22,8 +23,7 @@ launch(CommonPool + job) {
         users.take(5)
             .map { user ->
               async(coroutineContext) {
-                val badges = service.getBadges(user.id)
-                UserStats(user, badges.await())
+                userDetail(user)
               }
             }
             .map { it.await() }
@@ -33,6 +33,11 @@ launch(CommonPool + job) {
   }
 }
   }
+
+suspend fun userDetail(user: User): UserStats {
+  val badges = service.getBadges(user.id)
+  return UserStats(user, badges.await())
+}
 
   private suspend fun updateUi(s: Any) = withContext(UI) {
     state = s.toString()

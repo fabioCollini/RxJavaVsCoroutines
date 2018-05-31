@@ -5,39 +5,36 @@ import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers.io
-import it.codingjam.common.Badge
-import it.codingjam.common.User
 import it.codingjam.common.arch.LiveDataDelegate
 
 class ViewModel1(private val service: StackOverflowServiceRx) : ViewModel() {
 
-    val liveDataDelegate = LiveDataDelegate("")
+  val liveDataDelegate = LiveDataDelegate("")
 
-    var state by liveDataDelegate
+  var state by liveDataDelegate
 
-    private val disposable = CompositeDisposable()
+  private val disposable = CompositeDisposable()
 
-    fun load() {
-        disposable +=
-                service.getTopUsers()
-                        .map { it.first() }
-                        .flatMap { firstUser ->
-                            service.getBadges(firstUser.id)
-                                    .map { badges -> firstUser to badges }
-                        }
-                        .subscribeOn(io())
-                        .observeOn(mainThread())
-                        .subscribe(
-                                { pair: Pair<User, List<Badge>> -> updateUi(pair) },
-                                { e -> updateUi(e) }
-                        )
+  fun load() {
+    disposable +=
+service.getTopUsers()
+    .map { it.first() }
+    .flatMap { firstUser ->
+      service.getBadges(firstUser.id)
     }
+    .subscribeOn(io())
+    .observeOn(mainThread())
+    .subscribe(
+        { badges -> updateUi(badges) },
+        { e -> updateUi(e) }
+    )
+  }
 
-    private fun updateUi(s: Any) {
-        state = s.toString()
-    }
+  private fun updateUi(s: Any) {
+    state = s.toString()
+  }
 
-    override fun onCleared() {
-        disposable.clear()
-    }
+  override fun onCleared() {
+    disposable.clear()
+  }
 }

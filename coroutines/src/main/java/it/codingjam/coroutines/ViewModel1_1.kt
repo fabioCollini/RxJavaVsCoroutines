@@ -9,7 +9,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 
-class ViewModel2(private val service: StackOverflowServiceCoroutines) : ViewModel() {
+class ViewModel1_1(private val service: StackOverflowServiceCoroutines) : ViewModel() {
 
   val liveDataDelegate = LiveDataDelegate("")
 
@@ -18,20 +18,19 @@ class ViewModel2(private val service: StackOverflowServiceCoroutines) : ViewMode
   private val job = Job()
 
   fun load() {
-  launch(CommonPool + job) {
-    try {
-      val users = service.getTopUsers().await()
-      val usersWithBadges: List<UserStats> =
-          users.take(5)
-              .map { it to service.getBadges(it.id) }
-              .map { (user, badges) ->
-                UserStats(user, badges.await())
-              }
-      updateUi(usersWithBadges)
-    } catch (e: Exception) {
-      updateUi(e)
-    }
+launch(CommonPool + job) {
+  try {
+    updateUi("loading users")
+    val users = service.getTopUsers().await()
+    updateUi("loading badges")
+    val firstUser = users.first()
+    val badges = service.getBadges(firstUser.id).await()
+    val user = UserStats(firstUser, badges)
+    updateUi(user)
+  } catch (e: Exception) {
+    updateUi(e)
   }
+}
   }
 
   private suspend fun updateUi(s: Any) = withContext(UI) {

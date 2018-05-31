@@ -1,7 +1,7 @@
 package it.codingjam.common
 
 data class UserStats(
-        val user: User,
-        val tags: List<Tag>,
-        val badges: List<Badge>
+    val user: User,
+    val badges: List<Badge>,
+    val tags: List<Tag> = emptyList()
 )
