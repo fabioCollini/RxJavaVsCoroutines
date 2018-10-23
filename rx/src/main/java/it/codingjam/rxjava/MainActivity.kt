@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private val viewModel by viewModel(this) {
-        ViewModel1_1(ServiceFactory.createRxJavaService(RxJava2CallAdapterFactory.create())).also { it.load() }
+        ViewModel1_1(ServiceFactory.createService(RxJava2CallAdapterFactory.create())).also { it.load() }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

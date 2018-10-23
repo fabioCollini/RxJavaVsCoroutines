@@ -38,9 +38,9 @@ class ViewModel4(private val service: StackOverflowServiceRx) : ViewModel() {
 private fun userDetail(user: User): Single<UserStats> {
   return Singles.zip(
       service.getBadges(user.id).subscribeOn(io()),
-      service.getTags(user.id).subscribeOn(io()),
-      { badges, tags -> UserStats(user, badges, tags) }
-  )
+      service.getTags(user.id).subscribeOn(io())) {
+      badges, tags -> UserStats(user, badges, tags)
+  }
 }
 
   private fun updateUi(s: Any) {

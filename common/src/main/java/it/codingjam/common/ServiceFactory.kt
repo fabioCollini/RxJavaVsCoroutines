@@ -23,7 +23,7 @@ object ServiceFactory {
                 .build()
     }
 
-    inline fun <reified T> createRxJavaService(callAdapter: CallAdapter.Factory): T {
+    inline fun <reified T> createService(callAdapter: CallAdapter.Factory): T {
         val gson = GsonBuilder().create()
         return Retrofit.Builder()
                 .baseUrl("http://api.stackexchange.com/2.2/")

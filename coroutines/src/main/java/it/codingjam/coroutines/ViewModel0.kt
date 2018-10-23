@@ -2,41 +2,45 @@ package it.codingjam.coroutines
 
 import android.arch.lifecycle.ViewModel
 import it.codingjam.common.arch.LiveDataDelegate
-import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.CoroutineScope
+import kotlinx.coroutines.experimental.Dispatchers.IO
+import kotlinx.coroutines.experimental.Dispatchers.Main
 import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 
 class ViewModel0(
-    private val service: StackOverflowServiceCoroutines
-) : ViewModel() {
+        private val service: StackOverflowServiceCoroutines
+) : ViewModel(), CoroutineScope {
 
-  val liveDataDelegate = LiveDataDelegate("")
+    val liveDataDelegate = LiveDataDelegate("")
 
-  var state by liveDataDelegate
+    var state by liveDataDelegate
 
-  private val job = Job()
+    private val job = Job()
 
-  fun load() {
-launch(CommonPool + job) {
-  try {
-    val users = service.getTopUsers().await()
-    updateUi(users)
-  } catch (e: Exception) {
-    updateUi(e)
-  }
-}
-  }
+    override val coroutineContext
+        get() = IO + job
 
-  private suspend fun updateUi(s: Any) {
-    withContext(UI) {
-      //...
-      state = s.toString()
+    fun load() {
+        launch {
+            try {
+                val users = service.getTopUsers().await()
+                updateUi(users)
+            } catch (e: Exception) {
+                updateUi(e)
+            }
+        }
     }
-  }
 
-  override fun onCleared() {
-    job.cancel()
-  }
+    private suspend fun updateUi(s: Any) {
+        withContext(Main) {
+            //...
+            state = s.toString()
+        }
+    }
+
+    override fun onCleared() {
+        job.cancel()
+    }
 }

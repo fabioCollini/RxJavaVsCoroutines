@@ -170,7 +170,7 @@ class MyTest {
 
     @Test fun retrofit() = runBlocking {
         val job = launch {
-            val service = ServiceFactory.createRxJavaService<StackOverflowServiceCoroutines>(CoroutineCallAdapterFactory())
+            val service = ServiceFactory.createService<StackOverflowServiceCoroutines>(CoroutineCallAdapterFactory())
 
             service.getTopUsers()
                     .await()
@@ -188,7 +188,7 @@ class MyTest {
 
     @Test fun retrofit2() = runBlocking {
         val job = launch {
-            val service = ServiceFactory.createRxJavaService<StackOverflowServiceCoroutines>(CoroutineCallAdapterFactory())
+            val service = ServiceFactory.createService<StackOverflowServiceCoroutines>(CoroutineCallAdapterFactory())
 
             service.getTopUsers()
                     .await()
