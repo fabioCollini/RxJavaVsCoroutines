@@ -2,12 +2,12 @@ package it.codingjam.coroutines
 
 import android.arch.lifecycle.ViewModel
 import it.codingjam.common.arch.LiveDataDelegate
-import kotlinx.coroutines.experimental.CoroutineScope
-import kotlinx.coroutines.experimental.Dispatchers.IO
-import kotlinx.coroutines.experimental.Dispatchers.Main
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.withContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ViewModel0(
         private val service: StackOverflowServiceCoroutines

@@ -4,9 +4,7 @@ import it.codingjam.common.Badge
 import it.codingjam.common.EnvelopePayload
 import it.codingjam.common.Tag
 import it.codingjam.common.User
-import kotlinx.coroutines.experimental.Deferred
-import retrofit2.http.GET
-import retrofit2.http.Path
+import kotlinx.coroutines.Deferred
 
 interface StackOverflowServiceCoroutines {
 

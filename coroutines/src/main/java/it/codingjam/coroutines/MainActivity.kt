@@ -3,16 +3,17 @@ package it.codingjam.coroutines
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.experimental.CoroutineCallAdapterFactory
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import it.codingjam.common.ServiceFactory
 import it.codingjam.common.arch.viewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.experimental.CoroutineScope
-import kotlinx.coroutines.experimental.Dispatchers.Main
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.suspendCancellableCoroutine
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.resume
 
 class MainActivity : AppCompatActivity(), CoroutineScope {
 

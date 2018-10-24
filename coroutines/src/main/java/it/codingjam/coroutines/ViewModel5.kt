@@ -2,10 +2,10 @@ package it.codingjam.coroutines
 
 import android.arch.lifecycle.ViewModel
 import it.codingjam.common.arch.LiveDataDelegate
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.Dispatchers.Main
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Main
 import java.util.concurrent.TimeUnit.SECONDS
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlin.coroutines.CoroutineContext
 
 class ViewModel5(private val service: StackOverflowServiceCoroutines) : ViewModel(), CoroutineScope {
 

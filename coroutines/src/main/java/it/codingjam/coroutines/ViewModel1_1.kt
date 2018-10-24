@@ -3,9 +3,9 @@ package it.codingjam.coroutines
 import android.arch.lifecycle.ViewModel
 import it.codingjam.common.UserStats
 import it.codingjam.common.arch.LiveDataDelegate
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.Dispatchers.Main
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Main
+import kotlin.coroutines.CoroutineContext
 
 class ViewModel1_1(private val service: StackOverflowServiceCoroutines) : ViewModel(), CoroutineScope {
 

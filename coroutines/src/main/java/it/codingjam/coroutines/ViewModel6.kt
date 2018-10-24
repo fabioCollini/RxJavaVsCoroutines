@@ -2,11 +2,11 @@ package it.codingjam.coroutines
 
 import android.arch.lifecycle.ViewModel
 import it.codingjam.common.arch.LiveDataDelegate
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.Dispatchers.Main
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Main
 import java.util.*
 import java.util.concurrent.TimeUnit.SECONDS
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlin.coroutines.CoroutineContext
 
 class ViewModel6(private val service: StackOverflowServiceCoroutines) : ViewModel(), CoroutineScope {
 
@@ -23,7 +23,7 @@ class ViewModel6(private val service: StackOverflowServiceCoroutines) : ViewMode
         launch {
             try {
                 exponentialBackoff(3) {
-                    withTimeout(10, SECONDS) {
+                    withTimeout(SECONDS.toMillis(10)) {
                         val users = service.getTopUsers().await()
                         updateUi(users)
                     }
