@@ -7,9 +7,9 @@ import android.widget.Filter
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.schedulers.Schedulers.io
 import it.codingjam.common.ServiceFactory
 import it.codingjam.common.arch.viewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -60,10 +60,9 @@ class MainActivity : AppCompatActivity() {
                 .map { it.toString() }
                 .debounce(300, MILLISECONDS)
                 .filter { it.isNotEmpty() }
-                .distinctUntilChanged()
-                .switchMapSingle { retrieveData(it) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .switchMapSingle { retrieveData(it).subscribeOn(io()) }
+                .subscribeOn(io())
+                .observeOn(mainThread())
                 .subscribe {
                     adapter.clear()
                     adapter.addAll(it)
