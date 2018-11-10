@@ -25,7 +25,7 @@ class ViewModel0(
     fun load() {
         launch {
             try {
-                val users = service.getTopUsers().await()
+                val users = service.getTopUsers()
                 updateUi(users)
             } catch (e: Exception) {
                 updateUi(e)

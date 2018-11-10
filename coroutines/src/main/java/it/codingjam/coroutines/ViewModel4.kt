@@ -22,11 +22,11 @@ class ViewModel4(private val service: StackOverflowServiceCoroutines) : ViewMode
     fun load() {
         launch {
             try {
-                val users = service.getTopUsers().await()
+                val users = service.getTopUsers()
                 val userStats: List<UserStats> =
                         users.take(5)
                                 .map {
-                                    async(coroutineContext) {
+                                    async {
                                         userDetail(it)
                                     }
                                 }
@@ -51,9 +51,9 @@ class ViewModel4(private val service: StackOverflowServiceCoroutines) : ViewMode
     }
 
     suspend fun userDetail(it: User): UserStats {
-        val badges = service.getBadges(it.id)
+        val badges = async { service.getBadges(it.id) }
         val tags = service.getTags(it.id)
-        return UserStats(it, badges.await(), tags.await())
+        return UserStats(it, badges.await(), tags)
     }
 
     private suspend fun updateUi(s: Any) = withContext(Main) {

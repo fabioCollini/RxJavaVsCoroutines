@@ -23,7 +23,7 @@ class ViewModel5(private val service: StackOverflowServiceCoroutines) : ViewMode
             try {
                 retry(3) {
                     withTimeout(SECONDS.toMillis(10)) {
-                        val users = service.getTopUsers().await()
+                        val users = service.getTopUsers()
                         updateUi(users)
                     }
                 }

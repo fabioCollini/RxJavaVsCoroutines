@@ -22,10 +22,10 @@ class ViewModel1_1(private val service: StackOverflowServiceCoroutines) : ViewMo
         launch {
             try {
                 updateUi("loading users")
-                val users = service.getTopUsers().await()
+                val users = service.getTopUsers()
                 updateUi("loading badges")
                 val firstUser = users.first()
-                val badges = service.getBadges(firstUser.id).await()
+                val badges = service.getBadges(firstUser.id)
                 val user = UserStats(firstUser, badges)
                 updateUi(user)
             } catch (e: Exception) {

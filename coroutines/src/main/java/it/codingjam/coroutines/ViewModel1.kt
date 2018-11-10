@@ -25,9 +25,9 @@ class ViewModel1(private val service: StackOverflowServiceCoroutines) : ViewMode
     fun load() {
         launch {
             try {
-                val users = service.getTopUsers().await()
+                val users = service.getTopUsers()
                 val firstUser = users.first()
-                val badges = service.getBadges(firstUser.id).await()
+                val badges = service.getBadges(firstUser.id)
                 val user = UserStats(firstUser, badges)
                 updateUi(user)
             } catch (e: Exception) {

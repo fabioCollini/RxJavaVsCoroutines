@@ -21,10 +21,10 @@ class ViewModel2(private val service: StackOverflowServiceCoroutines) : ViewMode
     fun load() {
         launch {
             try {
-                val users = service.getTopUsers().await()
+                val users = service.getTopUsers()
                 val usersWithBadges: List<UserStats> =
                         users.take(5)
-                                .map { it to service.getBadges(it.id) }
+                                .map { it to async { service.getBadges(it.id) } }
                                 .map { (user, badges) ->
                                     UserStats(user, badges.await())
                                 }

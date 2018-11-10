@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
     private val viewModel by viewModel(this) {
         val service = ServiceFactory.createService<StackOverflowServiceCoroutines>(CoroutineCallAdapterFactory())
-        ViewModel3(service).also { it.load() }
+        ViewModel0(service).also { it.load() }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
