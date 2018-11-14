@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Filter
 import androidx.appcompat.app.AppCompatActivity
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import it.codingjam.common.ServiceFactory
 import it.codingjam.common.arch.viewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -28,7 +27,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         get() = Main + job
 
     private val viewModel by viewModel(this) {
-        val service = ServiceFactory.createService<StackOverflowServiceCoroutines>(CoroutineCallAdapterFactory())
+        val service = ServiceFactory.createService<StackOverflowServiceCoroutines>()
         ViewModel0(service).also { it.load() }
     }
 
@@ -73,7 +72,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
         val channel: SendChannel<String> = actor(capacity = UNLIMITED) {
             var lastJob: Job? = null
-            consumeEach {  s ->
+            consumeEach { s ->
                 lastJob?.cancel()
                 lastJob = launch {
                     delay(300)

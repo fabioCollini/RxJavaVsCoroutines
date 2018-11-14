@@ -3,7 +3,6 @@ package it.codingjam.common
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.CallAdapter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -23,11 +22,10 @@ object ServiceFactory {
                 .build()
     }
 
-    inline fun <reified T> createService(callAdapter: CallAdapter.Factory): T {
+    inline fun <reified T> createService(): T {
         val gson = GsonBuilder().create()
         return Retrofit.Builder()
-                .baseUrl("http://api.stackexchange.com/2.2/")
-                .addCallAdapterFactory(callAdapter)
+                .baseUrl("https://api.stackexchange.com/2.2/")
                 .client(createOkHttpClient())
                 .addConverterFactory(DenvelopingConverter(gson))
                 .addConverterFactory(GsonConverterFactory.create(gson))
