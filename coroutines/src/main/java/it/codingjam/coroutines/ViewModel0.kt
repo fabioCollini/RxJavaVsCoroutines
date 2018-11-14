@@ -1,15 +1,13 @@
 package it.codingjam.coroutines
 
-import it.codingjam.common.arch.LiveDataDelegate
+import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.launch
 
 class ViewModel0(
         private val service: StackOverflowServiceCoroutines
 ) : ViewModel() {
 
-    val liveDataDelegate = LiveDataDelegate("")
-
-    var state by liveDataDelegate
+    val state = MutableLiveData<String>()
 
     fun load() {
         viewModelScope.launch {
@@ -23,6 +21,6 @@ class ViewModel0(
     }
 
     private fun updateUi(s: Any) {
-        state = s.toString()
+        state.value = s.toString()
     }
 }

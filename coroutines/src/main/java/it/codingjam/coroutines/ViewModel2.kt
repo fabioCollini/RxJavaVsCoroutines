@@ -1,15 +1,13 @@
 package it.codingjam.coroutines
 
+import androidx.lifecycle.MutableLiveData
 import it.codingjam.common.UserStats
-import it.codingjam.common.arch.LiveDataDelegate
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class ViewModel2(private val service: StackOverflowServiceCoroutines) : ViewModel() {
 
-    val liveDataDelegate = LiveDataDelegate("")
-
-    var state by liveDataDelegate
+    val state = MutableLiveData<String>()
 
     fun load() {
         viewModelScope.launch {
@@ -29,6 +27,6 @@ class ViewModel2(private val service: StackOverflowServiceCoroutines) : ViewMode
     }
 
     private fun updateUi(s: Any) {
-        state = s.toString()
+        state.value = s.toString()
     }
 }

@@ -1,17 +1,15 @@
 package it.codingjam.coroutines
 
+import androidx.lifecycle.MutableLiveData
 import it.codingjam.common.User
 import it.codingjam.common.UserStats
-import it.codingjam.common.arch.LiveDataDelegate
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 class ViewModel4(private val service: StackOverflowServiceCoroutines) : ViewModel() {
 
-    val liveDataDelegate = LiveDataDelegate("")
-
-    var state by liveDataDelegate
+    val state = MutableLiveData<String>()
 
     fun load() {
         viewModelScope.launch {
@@ -19,29 +17,19 @@ class ViewModel4(private val service: StackOverflowServiceCoroutines) : ViewMode
                 val users = service.getTopUsers()
                 val userStats: List<UserStats> =
                         users.take(5)
-                                .map {
-                                    async {
-                                        userDetail(it)
-                                    }
-                                }
+                                .map { user -> async { userDetail(user) } }
                                 .map { it.await() }
                 updateUi(userStats)
             } catch (e: Exception) {
                 updateUi(e)
             }
         }
-//        launch {
-//            try {
-//                val users = service.getTopUsers().await()
-//                val userStats: List<UserStats> =
-//                        users.take(5)
-//                                .map { Triple(it, service.getTags(it.id), service.getBadges(it.id)) }
-//                                .map { (user, tags, badges) -> UserStats(user, badges.await(), tags.await()) }
-//                updateUi(userStats)
-//            } catch (e: Exception) {
-//                updateUi(e)
-//            }
-//        }
+    }
+
+    suspend fun userDetailSync(it: User): UserStats {
+        val badges = service.getBadges(it.id)
+        val tags = service.getTags(it.id)
+        return UserStats(it, badges, tags)
     }
 
     suspend fun userDetail(it: User): UserStats = coroutineScope {
@@ -51,6 +39,6 @@ class ViewModel4(private val service: StackOverflowServiceCoroutines) : ViewMode
     }
 
     private fun updateUi(s: Any) {
-        state = s.toString()
+        state.value = s.toString()
     }
 }

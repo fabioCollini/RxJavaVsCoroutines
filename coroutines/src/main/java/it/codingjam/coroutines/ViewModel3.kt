@@ -1,15 +1,13 @@
 package it.codingjam.coroutines
 
+import androidx.lifecycle.MutableLiveData
 import it.codingjam.common.UserStats
-import it.codingjam.common.arch.LiveDataDelegate
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class ViewModel3(private val service: StackOverflowServiceCoroutines) : ViewModel() {
 
-    val liveDataDelegate = LiveDataDelegate("")
-
-    var state by liveDataDelegate
+    val state = MutableLiveData<String>()
 
     fun load() {
         viewModelScope.launch {
@@ -17,12 +15,7 @@ class ViewModel3(private val service: StackOverflowServiceCoroutines) : ViewMode
                 val users = service.getTopUsers()
                 val usersWithBadges: List<UserStats> =
                         users.take(5)
-                                .map { user ->
-                                    async {
-                                        val badges = async { service.getBadges(user.id) }
-                                        UserStats(user, badges.await())
-                                    }
-                                }
+                                .map { user -> async { UserStats(user, service.getBadges(user.id)) } }
                                 .map { it.await() }
                 updateUi(usersWithBadges)
             } catch (e: Exception) {
@@ -32,6 +25,6 @@ class ViewModel3(private val service: StackOverflowServiceCoroutines) : ViewMode
     }
 
     private fun updateUi(s: Any) {
-        state = s.toString()
+        state.value = s.toString()
     }
 }
