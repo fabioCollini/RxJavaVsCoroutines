@@ -23,11 +23,13 @@ object ServiceFactory {
                 .build()
     }
 
-    inline fun <reified T> createService(callAdapter: CallAdapter.Factory): T {
+    inline fun <reified T> createService(callAdapter: CallAdapter.Factory? = null): T {
         val gson = GsonBuilder().create()
         return Retrofit.Builder()
                 .baseUrl("http://api.stackexchange.com/2.2/")
-                .addCallAdapterFactory(callAdapter)
+                .apply {
+                    callAdapter?.let { addCallAdapterFactory(it) }
+                }
                 .client(createOkHttpClient())
                 .addConverterFactory(DenvelopingConverter(gson))
                 .addConverterFactory(GsonConverterFactory.create(gson))
