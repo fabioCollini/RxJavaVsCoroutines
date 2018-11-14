@@ -1,11 +1,10 @@
 package it.codingjam.common.arch
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
-import android.support.v4.app.FragmentActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 
-inline fun <reified VM : ViewModel> viewModel(activity: FragmentActivity, crossinline factory: () -> VM): Lazy<VM> {
+inline fun <reified VM : ViewModel> viewModel(activity: androidx.fragment.app.FragmentActivity, crossinline factory: () -> VM): Lazy<VM> {
     return lazy {
         ViewModelProviders.of(activity, object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {

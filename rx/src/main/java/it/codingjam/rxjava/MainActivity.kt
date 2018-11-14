@@ -1,9 +1,9 @@
 package it.codingjam.rxjava
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.widget.ArrayAdapter
 import android.widget.Filter
+import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.Single

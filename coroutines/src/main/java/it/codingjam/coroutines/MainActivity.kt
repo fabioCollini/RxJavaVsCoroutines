@@ -1,12 +1,12 @@
 package it.codingjam.coroutines
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Filter
+import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import it.codingjam.common.ServiceFactory
 import it.codingjam.common.arch.viewModel
