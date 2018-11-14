@@ -1,25 +1,18 @@
 package it.codingjam.coroutines
 
-import androidx.lifecycle.ViewModel
 import it.codingjam.common.arch.LiveDataDelegate
-import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import java.util.concurrent.TimeUnit.SECONDS
-import kotlin.coroutines.CoroutineContext
 
-class ViewModel5(private val service: StackOverflowServiceCoroutines) : ViewModel(), CoroutineScope {
+class ViewModel5(private val service: StackOverflowServiceCoroutines) : ViewModel() {
 
     val liveDataDelegate = LiveDataDelegate("")
 
     var state by liveDataDelegate
 
-    private val job = Job()
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.IO + job
-
     fun load() {
-        launch {
+        viewModelScope.launch {
             try {
                 retry(3) {
                     withTimeout(SECONDS.toMillis(10)) {
@@ -33,13 +26,8 @@ class ViewModel5(private val service: StackOverflowServiceCoroutines) : ViewMode
         }
     }
 
-    private suspend fun updateUi(s: Any) = withContext(Main) {
+    private fun updateUi(s: Any) {
         state = s.toString()
-    }
-
-
-    override fun onCleared() {
-        job.cancel()
     }
 }
 

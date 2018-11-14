@@ -1,26 +1,20 @@
 package it.codingjam.coroutines
 
-import androidx.lifecycle.ViewModel
 import it.codingjam.common.User
 import it.codingjam.common.UserStats
 import it.codingjam.common.arch.LiveDataDelegate
-import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.Main
-import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
-class ViewModel3_1(private val service: StackOverflowServiceCoroutines) : ViewModel(), CoroutineScope {
+class ViewModel3_1(private val service: StackOverflowServiceCoroutines) : ViewModel() {
 
     val liveDataDelegate = LiveDataDelegate("")
 
     var state by liveDataDelegate
 
-    private val job = Job()
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.IO + job
-
     fun load() {
-        launch {
+        viewModelScope.launch {
             try {
                 val users = service.getTopUsers()
                 val usersWithBadges: List<UserStats> =
@@ -38,17 +32,12 @@ class ViewModel3_1(private val service: StackOverflowServiceCoroutines) : ViewMo
         }
     }
 
-    suspend fun userDetail(user: User): UserStats {
+    suspend fun userDetail(user: User): UserStats = coroutineScope {
         val badges = async { service.getBadges(user.id) }
-        return UserStats(user, badges.await())
+        UserStats(user, badges.await())
     }
 
-    private suspend fun updateUi(s: Any) = withContext(Main) {
+    private fun updateUi(s: Any) {
         state = s.toString()
-    }
-
-
-    override fun onCleared() {
-        job.cancel()
     }
 }
