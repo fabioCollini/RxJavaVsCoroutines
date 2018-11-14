@@ -30,6 +30,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0"
+    api 'androidx.lifecycle:lifecycle-runtime:2.0.0'
+    api 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 
     implementation 'androidx.core:core-ktx:1.0.1'
 
@@ -38,9 +41,6 @@ dependencies {
     }
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
-
-    api "android.arch.lifecycle:runtime:1.1.1"
-    api "android.arch.lifecycle:extensions:1.1.1"
 
     testImplementation 'junit:junit:4.12'
 }
