@@ -21,9 +21,14 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
+    api 'com.github.square.retrofit:retrofit:0ec00e8040'
     implementation('com.squareup.retrofit2:converter-gson:2.3.0') {
         exclude group: 'com.squareup.retrofit2'
     }
