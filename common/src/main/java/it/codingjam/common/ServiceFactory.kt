@@ -1,6 +1,7 @@
 package it.codingjam.common
 
 import com.google.gson.GsonBuilder
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.CallAdapter
@@ -26,7 +27,7 @@ object ServiceFactory {
     inline fun <reified T> createService(callAdapter: CallAdapter.Factory? = null): T {
         val gson = GsonBuilder().create()
         return Retrofit.Builder()
-                .baseUrl("http://api.stackexchange.com/2.2/")
+                .baseUrl("https://api.stackexchange.com/2.2/")
                 .apply {
                     callAdapter?.let { addCallAdapterFactory(it) }
                 }
@@ -35,4 +36,8 @@ object ServiceFactory {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build().create(T::class.java)
     }
+
+    val rx = createService<StackOverflowServiceRx>(RxJava2CallAdapterFactory.create())
+
+    val coroutines = createService<StackOverflowServiceCoroutines>()
 }

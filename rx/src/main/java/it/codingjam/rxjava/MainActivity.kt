@@ -3,7 +3,6 @@ package it.codingjam.rxjava
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.observe
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import it.codingjam.common.ServiceFactory
 import it.codingjam.common.arch.viewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -12,7 +11,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private val viewModel by viewModel(this) {
-        ViewModel0(ServiceFactory.createService(RxJava2CallAdapterFactory.create())).also { it.load() }
+        ViewModel0(ServiceFactory.rx).also { it.load() }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

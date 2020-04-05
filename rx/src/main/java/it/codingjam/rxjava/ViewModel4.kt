@@ -8,6 +8,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.Singles
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers.io
+import it.codingjam.common.StackOverflowServiceRx
 import it.codingjam.common.User
 import it.codingjam.common.UserStats
 

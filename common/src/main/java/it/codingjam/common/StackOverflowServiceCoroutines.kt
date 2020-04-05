@@ -1,9 +1,5 @@
-package it.codingjam.coroutines
+package it.codingjam.common
 
-import it.codingjam.common.Badge
-import it.codingjam.common.EnvelopePayload
-import it.codingjam.common.Tag
-import it.codingjam.common.User
 import retrofit2.http.GET
 import retrofit2.http.Path
 

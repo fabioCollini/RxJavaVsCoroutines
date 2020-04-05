@@ -10,8 +10,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private val viewModel by viewModel(this) {
-        val service = ServiceFactory.createService<StackOverflowServiceCoroutines>()
-        ViewModel0(service).also { it.load() }
+        ViewModel0(ServiceFactory.coroutines).also { it.load() }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

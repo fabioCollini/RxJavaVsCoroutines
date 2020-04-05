@@ -6,6 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers.io
+import it.codingjam.common.StackOverflowServiceRx
 import java.util.concurrent.TimeUnit.SECONDS
 
 class ViewModel5(private val service: StackOverflowServiceRx) : ViewModel() {
