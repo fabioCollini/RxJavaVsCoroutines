@@ -1,7 +1,9 @@
-package it.codingjam.common
+package it.codingjam.common.utils
 
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import it.codingjam.common.StackOverflowServiceCoroutines
+import it.codingjam.common.StackOverflowServiceRx
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.CallAdapter

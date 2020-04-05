@@ -6,9 +6,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers.io
-import it.codingjam.common.ServiceFactory
+import it.codingjam.common.utils.ServiceFactory
 import it.codingjam.common.StackOverflowServiceRx
-import it.codingjam.common.UserStats
+import it.codingjam.common.model.UserStats
 
 class ViewModel1_2 : ViewModel() {
 

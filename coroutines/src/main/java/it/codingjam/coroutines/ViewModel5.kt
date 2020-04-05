@@ -3,7 +3,7 @@ package it.codingjam.coroutines
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import it.codingjam.common.ServiceFactory
+import it.codingjam.common.utils.ServiceFactory
 import it.codingjam.common.StackOverflowServiceCoroutines
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout

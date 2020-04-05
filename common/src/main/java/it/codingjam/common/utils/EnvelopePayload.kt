@@ -1,4 +1,4 @@
-package it.codingjam.common
+package it.codingjam.common.utils
 
 
 /**

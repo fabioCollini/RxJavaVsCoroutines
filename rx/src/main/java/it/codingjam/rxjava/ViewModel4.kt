@@ -8,10 +8,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.Singles
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers.io
-import it.codingjam.common.ServiceFactory
+import it.codingjam.common.utils.ServiceFactory
 import it.codingjam.common.StackOverflowServiceRx
-import it.codingjam.common.User
-import it.codingjam.common.UserStats
+import it.codingjam.common.model.User
+import it.codingjam.common.model.UserStats
 
 class ViewModel4 : ViewModel() {
 

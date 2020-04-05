@@ -1,6 +1,10 @@
 package it.codingjam.common
 
 import io.reactivex.Single
+import it.codingjam.common.model.Badge
+import it.codingjam.common.model.Tag
+import it.codingjam.common.model.User
+import it.codingjam.common.utils.EnvelopePayload
 import retrofit2.http.GET
 import retrofit2.http.Path
 

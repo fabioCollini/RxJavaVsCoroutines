@@ -3,9 +3,9 @@ package it.codingjam.coroutines
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import it.codingjam.common.ServiceFactory
+import it.codingjam.common.utils.ServiceFactory
 import it.codingjam.common.StackOverflowServiceCoroutines
-import it.codingjam.common.UserStats
+import it.codingjam.common.model.UserStats
 import kotlinx.coroutines.launch
 
 class ViewModel1_1 : ViewModel() {
