@@ -1,6 +1,9 @@
 package it.codingjam.coroutines
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import it.codingjam.common.ServiceFactory
 import it.codingjam.common.StackOverflowServiceCoroutines
 import it.codingjam.common.User
 import it.codingjam.common.UserStats
@@ -8,7 +11,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-class ViewModel4(private val service: StackOverflowServiceCoroutines) : ViewModel() {
+class ViewModel4 : ViewModel() {
+
+    private val service: StackOverflowServiceCoroutines = ServiceFactory.coroutines
 
     val state = MutableLiveData<String>()
 

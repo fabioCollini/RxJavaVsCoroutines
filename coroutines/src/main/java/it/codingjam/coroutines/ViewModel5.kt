@@ -1,12 +1,17 @@
 package it.codingjam.coroutines
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import it.codingjam.common.ServiceFactory
 import it.codingjam.common.StackOverflowServiceCoroutines
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import java.util.concurrent.TimeUnit.SECONDS
 
-class ViewModel5(private val service: StackOverflowServiceCoroutines) : ViewModel() {
+class ViewModel5 : ViewModel() {
+
+    private val service: StackOverflowServiceCoroutines = ServiceFactory.coroutines
 
     val state = MutableLiveData<String>()
 

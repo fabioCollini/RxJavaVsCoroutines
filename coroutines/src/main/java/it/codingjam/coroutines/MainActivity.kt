@@ -1,17 +1,14 @@
 package it.codingjam.coroutines
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.observe
-import it.codingjam.common.ServiceFactory
-import it.codingjam.common.arch.viewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel by viewModel(this) {
-        ViewModel0(ServiceFactory.coroutines).also { it.load() }
-    }
+    private val viewModel: ViewModel0 by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
