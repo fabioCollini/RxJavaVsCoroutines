@@ -1,18 +1,15 @@
 package it.codingjam.rxjava
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.observe
-import it.codingjam.common.ServiceFactory
-import it.codingjam.common.arch.viewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel by viewModel(this) {
-        ViewModel0(ServiceFactory.rx).also { it.load() }
-    }
+    private val viewModel: ViewModel0 by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +17,9 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.state.observe(this) {
             text.text = it
+        }
+        if (savedInstanceState == null) {
+            viewModel.load()
         }
     }
 }
