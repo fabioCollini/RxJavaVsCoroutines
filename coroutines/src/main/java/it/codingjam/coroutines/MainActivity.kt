@@ -2,8 +2,8 @@ package it.codingjam.coroutines
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.observe
 import it.codingjam.common.ServiceFactory
-import it.codingjam.common.arch.observe
 import it.codingjam.common.arch.viewModel
 import kotlinx.android.synthetic.main.activity_main.*
 

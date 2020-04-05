@@ -1,6 +1,8 @@
 package it.codingjam.common.arch
 
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 
 inline fun <reified VM : ViewModel> viewModel(activity: androidx.fragment.app.FragmentActivity, crossinline factory: () -> VM): Lazy<VM> {
     return lazy {
@@ -11,6 +13,3 @@ inline fun <reified VM : ViewModel> viewModel(activity: androidx.fragment.app.Fr
         }).get(VM::class.java)
     }
 }
-
-fun <T> LiveData<T>.observe(owner: LifecycleOwner, observer: (T?) -> Unit) =
-        observe(owner, Observer { observer(it) })
