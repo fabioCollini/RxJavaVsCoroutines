@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 class MainActivity : AppCompatActivity() {
 
     private val viewModel by viewModel(this) {
-        ViewModel1_1(ServiceFactory.createService(RxJava2CallAdapterFactory.create())).also { it.load() }
+        ViewModel0(ServiceFactory.createService(RxJava2CallAdapterFactory.create())).also { it.load() }
     }
 
     private var disposable: Disposable? = null
@@ -58,10 +58,9 @@ class MainActivity : AppCompatActivity() {
         auto_complete.threshold = 1
 
         disposable = RxTextView.textChanges(auto_complete)
-                .map { it.toString() }
-                .debounce(300, MILLISECONDS)
+                .debounce(200, MILLISECONDS)
                 .filter { it.isNotEmpty() }
-                .switchMapSingle { retrieveData(it).subscribeOn(io()) }
+                .switchMapSingle { retrieveData(it.toString()).subscribeOn(io()) }
                 .subscribeOn(io())
                 .observeOn(mainThread())
                 .subscribe {

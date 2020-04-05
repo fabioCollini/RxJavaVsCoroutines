@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Filter
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import it.codingjam.common.ServiceFactory
 import it.codingjam.common.arch.observe
@@ -76,7 +77,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             consumeEach { s ->
                 lastJob?.cancel()
                 lastJob = launch {
-                    delay(300)
+                    delay(200)
                     val data = retrieveData(s)
                     adapter.clear()
                     adapter.addAll(data)
@@ -84,13 +85,19 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             }
         }
 
-        auto_complete.addTextChangedListener(object : TextWatcher {
+        auto_complete.doOnTextChanged {
+            channel.offer(it)
+        }
+    }
+
+    fun TextView.doOnTextChanged(f: (String) -> Unit) {
+        addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                channel.offer(s.toString())
+                f(s.toString())
             }
         })
     }
