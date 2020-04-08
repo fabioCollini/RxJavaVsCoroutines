@@ -1,1 +1,2 @@
 include ':rx', ':common', 'coroutines'
+include ':demo'
