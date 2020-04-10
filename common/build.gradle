@@ -50,6 +50,11 @@ dependencies {
     api 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     api 'androidx.core:core-ktx:1.2.0'
 
+    api 'io.reactivex.rxjava2:rxjava:2.2.12'
+    api 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    api 'io.reactivex.rxjava2:rxkotlin:2.4.0'
+    api 'com.jakewharton.rxbinding2:rxbinding:2.2.0'
+
     implementation('com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0') {
         exclude group: 'com.squareup.retrofit2'
     }
