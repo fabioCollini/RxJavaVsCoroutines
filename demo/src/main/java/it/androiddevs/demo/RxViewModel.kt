@@ -17,7 +17,6 @@ class RxViewModel : ViewModel() {
     private val disposable = CompositeDisposable()
 
     fun load() {
-        //use case?
         disposable += repository.loadData()
                 .subscribeOn(io())
                 .observeOn(mainThread())
