@@ -6,11 +6,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers.io
-import it.codingjam.common.utils.ServiceFactory
 
 class RxViewModel : ViewModel() {
 
-    private val repository = RxRepository(ServiceFactory.rx)
+    private val repository = RxRepository()
 
     val state = MutableLiveData<Any>()
 
